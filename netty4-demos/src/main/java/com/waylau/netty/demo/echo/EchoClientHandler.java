@@ -4,6 +4,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.CharsetUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Echo Client Handler.
@@ -12,6 +14,9 @@ import io.netty.util.CharsetUtil;
  * @author <a href="https://waylau.com">Way Lau</a>
  */
 public class EchoClientHandler extends ChannelInboundHandlerAdapter {
+
+	static Logger log = LoggerFactory.getLogger(EchoClientHandler.class);
+
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) {
 		
@@ -19,6 +24,7 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
 		ByteBuf buf = (ByteBuf) msg; // 转为ByteBuf类型
 		String m = buf.toString(CharsetUtil.UTF_8);  // 转为字符串
 		System.out.println( "echo :" + m);
+		log.info("echo :{}",m);
 	}
 
 	@Override

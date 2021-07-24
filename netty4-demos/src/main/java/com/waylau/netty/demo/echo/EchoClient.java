@@ -13,6 +13,8 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Echo Client.
@@ -21,6 +23,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  * @author <a href="https://waylau.com">Way Lau</a>
  */
 public final class EchoClient {
+	static Logger log = LoggerFactory.getLogger(EchoClient.class);
 
 	public static void main(String[] args) throws Exception {
 		if (args.length != 2) {
@@ -61,7 +64,7 @@ public final class EchoClient {
 					
 					// 转为ByteBuf
 					ByteBuf buf = Unpooled.copiedBuffer(writeBuffer);
-					
+					log.info("键盘输入：{}",String.valueOf(writeBuffer));
 					// 写消息到管道
 					channel.writeAndFlush(buf);
 					

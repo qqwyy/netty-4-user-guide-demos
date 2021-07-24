@@ -2,6 +2,8 @@ package com.waylau.netty.demo.echo;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Echo Server Handler.
@@ -10,11 +12,13 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
  * @author <a href="https://waylau.com">Way Lau</a>
  */
 public class EchoServerHandler extends ChannelInboundHandlerAdapter {
+	static Logger log = LoggerFactory.getLogger(EchoServerHandler.class);
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) {
-		System.out.println(ctx.channel().remoteAddress() + " -> Server :" + msg);
-		
+
+//		System.out.println(ctx.channel().remoteAddress() + " -> Server :" + msg);
+		log.info(ctx.channel().remoteAddress() + " -> Server :" + msg);
 		// 写消息到管道
 		ctx.write(msg);// 写消息
 		ctx.flush(); // 冲刷消息

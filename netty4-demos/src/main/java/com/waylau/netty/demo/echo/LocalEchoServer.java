@@ -2,10 +2,12 @@ package com.waylau.netty.demo.echo;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.local.LocalEventLoopGroup;
 import io.netty.channel.local.LocalServerChannel;
+import io.netty.channel.socket.SocketChannel;
 
 /**
  * Local Echo Server.
@@ -36,7 +38,12 @@ public class LocalEchoServer {
 			
 			b.group(bossGroup, workerGroup) // 设置EventLoopGroup
 			.channel(LocalServerChannel.class) // 指明新的Channel的类型
-			.childHandler(new EchoServerHandler()) // 指定ChannelHandler
+			.childHandler(new ChannelInitializer<SocketChannel>() {
+				@Override
+				protected void initChannel(SocketChannel ch) throws Exception {
+					ch.pipeline().addLast("EchoServerHandler", new EchoServerHandler());// 添加ChannelHandler
+				}
+			}) // 指定ChannelHandler
 			.option(ChannelOption.SO_BACKLOG, 128) // 设置的ServerChannel的一些选项
 			.childOption(ChannelOption.SO_KEEPALIVE, true); // 设置的ServerChannel的子Channel的选项
  

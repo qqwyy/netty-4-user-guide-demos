@@ -8,6 +8,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Echo Server.
@@ -16,6 +18,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
  * @author <a href="https://waylau.com">Way Lau</a>
  */
 public class EchoServer {
+	static Logger log = LoggerFactory.getLogger(EchoServer.class);
 
 	public static int DEFAULT_PORT = 7;
 
@@ -51,7 +54,7 @@ public class EchoServer {
 			// 绑定端口，开始接收进来的连接
 			ChannelFuture f = b.bind(port).sync(); 
 
-			System.out.println("EchoServer已启动，端口：" + port);
+			log.info("EchoServer已启动，端口：{}", port);
 
 			// 等待服务器 socket 关闭 。
 			// 在这个例子中，这不会发生，但你可以优雅地关闭你的服务器。
