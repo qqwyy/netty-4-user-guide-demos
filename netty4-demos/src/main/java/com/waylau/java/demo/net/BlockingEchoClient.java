@@ -3,6 +3,9 @@
  */
 package com.waylau.java.demo.net;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,12 +14,13 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 /**
- * Blocking Echo Client.
- * 
+ * Blocking Echo Client
  * @since 1.0.0 2019年9月28日
  * @author <a href="https://waylau.com">Way Lau</a> 
  */
 public class BlockingEchoClient {
+
+    private static Logger log = LoggerFactory.getLogger(BlockingEchoClient.class);
 
 	public static void main(String[] args) {
         String hostName = "127.0.0.1";
@@ -30,6 +34,8 @@ public class BlockingEchoClient {
 
         try{
             Socket echoSocket = new Socket(hostName, portNumber);
+            log.info("连接{}:{}  连接状态：{}",hostName,portNumber,echoSocket.isConnected());
+
             PrintWriter out   = new PrintWriter(echoSocket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
 

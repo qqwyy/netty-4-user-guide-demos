@@ -12,18 +12,14 @@ import java.net.Socket;
 
 /**
  * Blocking Echo Server.
- * 
- * @since 1.0.0 2019年9月28日
- * @author <a href="https://waylau.com">Way Lau</a>
+ * 同一时间 只能接受一个客户端通信
  */
 public class BlockingEchoServer {
 
 	public static int DEFAULT_PORT = 7;
 
 	public static void main(String[] args) {
-
 		int port;
-
 		try {
 			port = Integer.parseInt(args[0]);
 		} catch (RuntimeException ex) {
@@ -34,15 +30,13 @@ public class BlockingEchoServer {
 		try {
 			// 服务器监听
 			serverSocket = new ServerSocket(port);
-			System.out.println(
-					"BlockingEchoServer已启动，端口：" + port);
+			System.out.println("BlockingEchoServer已启动，端口：" + port);
 			
 		} catch (IOException e) {
 			System.out.println("BlockingEchoServer启动异常，端口：" + port);
 			System.out.println(e.getMessage());
 		}
-		
-		// Java 7 try-with-resource语句
+
 		try (
 				// 接受客户端建立链接，生成Socket实例
 				Socket clientSocket = serverSocket.accept();
