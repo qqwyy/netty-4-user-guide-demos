@@ -3,6 +3,10 @@
  */
 package com.waylau.java.demo.nio;
 
+import com.waylau.java.demo.bio.BlockingEchoClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,17 +23,15 @@ import java.nio.channels.SocketChannel;
  */
 public class NonBlockingEchoClient {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		if (args.length != 2) {
-			System.err.println("用法: java NonBlockingEchoClient <host name> <port number>");
-			System.exit(1);
-		}
+	private static Logger log = LoggerFactory.getLogger(NonBlockingEchoClient.class);
 
-		String hostName = args[0];
-		int portNumber = Integer.parseInt(args[1]);
+	public static void main(String[] args) {
+		String hostName = "127.0.0.1";
+		int portNumber  = 8080;
+		if (args.length == 2) {
+			hostName = args[0];
+			portNumber = Integer.parseInt(args[1]);
+		}
 
 		SocketChannel socketChannel = null;
 		try {
@@ -41,7 +43,7 @@ public class NonBlockingEchoClient {
 		}
 
 		ByteBuffer writeBuffer = ByteBuffer.allocate(32);
-		ByteBuffer readBuffer = ByteBuffer.allocate(32);
+		ByteBuffer readBuffer  = ByteBuffer.allocate(32);
 
 		try (BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in))) {
 			String userInput;
@@ -59,7 +61,7 @@ public class NonBlockingEchoClient {
 				// 清理缓冲区
 				writeBuffer.clear();
 				readBuffer.clear();
-				System.out.println("echo: " + userInput);
+				log.info("echo: " + userInput);
 			}
 		} catch (UnknownHostException e) {
 			System.err.println("不明主机，主机名为： " + hostName);

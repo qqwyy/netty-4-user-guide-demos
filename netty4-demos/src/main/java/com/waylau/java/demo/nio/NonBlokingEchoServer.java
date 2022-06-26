@@ -3,6 +3,8 @@
  */
 package com.waylau.java.demo.nio;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -20,11 +22,11 @@ import java.util.Set;
  * @author <a href="https://waylau.com">Way Lau</a>
  */
 public class NonBlokingEchoServer {
-	public static int DEFAULT_PORT = 7;
 
-	/**
-	 * @param args
-	 */
+	private static Logger log = LoggerFactory.getLogger(NonBlokingEchoServer.class);
+
+	public static int DEFAULT_PORT = 8080;
+
 	public static void main(String[] args) {
 		int port;
 
@@ -44,7 +46,7 @@ public class NonBlokingEchoServer {
 			selector = Selector.open();
 			serverChannel.register(selector, SelectionKey.OP_ACCEPT);
 
-			System.out.println("NonBlokingEchoServer已启动，端口：" + port);
+			log.info("NonBlokingEchoServer已启动，端口：{}" ,port);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 			return;
@@ -59,8 +61,10 @@ public class NonBlokingEchoServer {
 			Set<SelectionKey> readyKeys = selector.selectedKeys();
 			Iterator<SelectionKey> iterator = readyKeys.iterator();
 			while (iterator.hasNext()) {
+				log.info("循环遍历step1  keys   数量:{}", readyKeys.size());
 				SelectionKey key = iterator.next();
-				iterator.remove();
+				iterator.remove();//为什么要删除呢 ？？
+				log.info("循环遍历step2  keys   数量:{}", readyKeys.size());
 				try {
 					// 可连接
 					if (key.isAcceptable()) {
@@ -87,8 +91,7 @@ public class NonBlokingEchoServer {
 						ByteBuffer output = (ByteBuffer) key.attachment();
 						client.read(output);
 
-						System.out.println(client.getRemoteAddress() 
-								+ " -> NonBlokingEchoServer：" + output.toString());
+						System.out.println(client.getRemoteAddress() + " -> NonBlokingEchoServer：" + output.toString());
 
 						key.interestOps(SelectionKey.OP_WRITE);
 					}
@@ -100,8 +103,7 @@ public class NonBlokingEchoServer {
 						output.flip();
 						client.write(output);
 
-						System.out.println("NonBlokingEchoServer  -> " 
-								+ client.getRemoteAddress() + "：" + output.toString());
+						System.out.println("NonBlokingEchoServer  -> " + client.getRemoteAddress() + "：" + output.toString());
 
 						output.compact();
 
@@ -112,10 +114,11 @@ public class NonBlokingEchoServer {
 					try {
 						key.channel().close();
 					} catch (IOException cex) {
-						System.out.println(
-								"NonBlockingEchoServer异常!" + cex.getMessage());
+						System.out.println("NonBlockingEchoServer异常!" + cex.getMessage());
 					}
 				}
+
+
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 /**
  * Welcome to https://waylau.com
  */
-package com.waylau.java.demo.net;
+package com.waylau.java.demo.bio;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
