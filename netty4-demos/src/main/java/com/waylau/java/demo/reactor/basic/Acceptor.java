@@ -15,7 +15,6 @@ import java.nio.channels.SocketChannel;
 public class Acceptor implements Runnable {
 
 	private final Selector selector;
-
 	private final ServerSocketChannel serverSocketChannel;
 
 	Acceptor(ServerSocketChannel serverSocketChannel, Selector selector) {

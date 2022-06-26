@@ -18,7 +18,7 @@ public class AsyncHandler implements Runnable {
 
 	private final Selector selector;
 
-	private final SelectionKey selectionKey;
+	private final SelectionKey  selectionKey;
 	private final SocketChannel socketChannel;
 
 	private ByteBuffer readBuffer = ByteBuffer.allocate(1024);
@@ -62,7 +62,6 @@ public class AsyncHandler implements Runnable {
 		if (selectionKey.isValid()) {
 			try {
 				readBuffer.clear();
-
 				// read方法结束，意味着本次"读就绪"变为"读完毕"，标记着一次就绪事件的结束
 				int count = socketChannel.read(readBuffer);
 				if (count > 0) {
@@ -115,21 +114,16 @@ public class AsyncHandler implements Runnable {
 	private void sendWorker() {
 		try {
 			sendBuffer.clear();
-			sendBuffer.put(String
-					.format("recived %s from %s",  new String(readBuffer.array()),socketChannel.getRemoteAddress())
-					.getBytes());
+			sendBuffer.put(String.format("recived %s from %s",  new String(readBuffer.array()),socketChannel.getRemoteAddress()).getBytes());
 			sendBuffer.flip();
-
 			// write方法结束，意味着本次写就绪变为写完毕，标记着一次事件的结束
 			int count = socketChannel.write(sendBuffer);
-
 			if (count < 0) {
 				// 同上，write场景下，取到-1，也意味着客户端断开连接
 				selectionKey.cancel();
 				socketChannel.close();
 				System.out.println("send close");
 			}
-
 			// 没断开连接，则再次切换到读
 			status = READ;
 		} catch (IOException e) {

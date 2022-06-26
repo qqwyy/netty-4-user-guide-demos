@@ -25,8 +25,7 @@ public class ThreadPoolExecutorDemo {
 		// 初始化线程池执行器
 		ExecutorService pool = new ThreadPoolExecutor(2, 2, 4000, TimeUnit.MILLISECONDS, workQueue);
 		
-		for (int i = 0; i < 3; i++) {
-			
+		for (int i = 0; i < 10; i++) {
 			// 提交任务
 			pool.submit(new MyTask());
 		}
@@ -40,7 +39,7 @@ class MyTask implements Runnable {
 		System.out.println(Thread.currentThread().getName() + " is working");
 		try {
 			// 模拟一段耗时工作
-			TimeUnit.SECONDS.sleep(3);
+			TimeUnit.SECONDS.sleep(2);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
