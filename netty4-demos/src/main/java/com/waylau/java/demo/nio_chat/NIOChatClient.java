@@ -34,10 +34,7 @@ public class NIOChatClient {
         client = SocketChannel.open(inetSocketAddress);
         client.configureBlocking(false);
         client.register(selector, SelectionKey.OP_READ);
-        log.info("本地地址：{} 连接服务端：{}  状态：{}"
-                ,client.getLocalAddress().toString()
-                ,inetSocketAddress.toString()
-                ,client.isConnected()
+        log.info("本地地址：{}  ，连接服务端：{}   ，状态：{}",client.getLocalAddress().toString(),inetSocketAddress.toString(),client.isConnected()
         );
     }
 
@@ -60,6 +57,7 @@ public class NIOChatClient {
                     if("".equals(line)) continue; //不允许发空消息
 //		            client.register(selector, SelectionKey.OP_WRITE);
                     client.write(charset.encode(line));//client既能写也能读，这边是写
+                    log.info("发送消息：{}    from:{} to:{} ",line,client.getLocalAddress(),client.getRemoteAddress());
                 }
                 scan.close();
             }catch(Exception e){
